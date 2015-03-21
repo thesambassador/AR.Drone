@@ -35,9 +35,7 @@ namespace AR.Drone.WinApp
         private uint _frameNumber;
         private NavigationData _navigationData;
         private NavigationPacket _navigationPacket;
-        private PacketRecorder _packetRecorderWorker;
-        private FileStream _recorderStream;
-        private Autopilot _autopilot;
+
 
         public MainForm()
         {
@@ -72,13 +70,8 @@ namespace AR.Drone.WinApp
 
         protected override void OnClosed(EventArgs e)
         {
-            if (_autopilot != null)
-            {
-                _autopilot.UnbindFromClient();
-                _autopilot.Stop();
-            }
 
-            StopRecording();
+
 
             _droneClient.Dispose();
             _videoPacketDecoderWorker.Dispose();
@@ -88,16 +81,12 @@ namespace AR.Drone.WinApp
 
         private void OnNavigationPacketAcquired(NavigationPacket packet)
         {
-            if (_packetRecorderWorker != null && _packetRecorderWorker.IsAlive)
-                _packetRecorderWorker.EnqueuePacket(packet);
 
             _navigationPacket = packet;
         }
 
         private void OnVideoPacketAcquired(VideoPacket packet)
         {
-            if (_packetRecorderWorker != null && _packetRecorderWorker.IsAlive)
-                _packetRecorderWorker.EnqueuePacket(packet);
             if (_videoPacketDecoderWorker.IsAlive)
                 _videoPacketDecoderWorker.EnqueuePacket(packet);
         }
@@ -161,8 +150,6 @@ namespace AR.Drone.WinApp
             }
             tvInfo.EndUpdate();
 
-            if (_autopilot != null && !_autopilot.Active && btnAutopilot.ForeColor != Color.Black)
-                btnAutopilot.ForeColor = Color.Black;
         }
 
         private void DumpBranch(TreeNodeCollection nodes, object o)
@@ -347,122 +334,6 @@ namespace AR.Drone.WinApp
             sendConfigTask.Start();
         }
 
-        private void StopRecording()
-        {
-            if (_packetRecorderWorker != null)
-            {
-                _packetRecorderWorker.Stop();
-                _packetRecorderWorker.Join();
-                _packetRecorderWorker = null;
-            }
-            if (_recorderStream != null)
-            {
-                _recorderStream.Dispose();
-                _recorderStream = null;
-            }
-        }
 
-        private void btnStartRecording_Click(object sender, EventArgs e)
-        {
-            string path = string.Format("flight_{0:yyyy_MM_dd_HH_mm}" + ARDroneTrackFileExt, DateTime.Now);
-
-            using (var dialog = new SaveFileDialog {DefaultExt = ARDroneTrackFileExt, Filter = ARDroneTrackFilesFilter, FileName = path})
-            {
-                if (dialog.ShowDialog(this) == DialogResult.OK)
-                {
-                    StopRecording();
-
-                    _recorderStream = new FileStream(dialog.FileName, FileMode.OpenOrCreate);
-                    _packetRecorderWorker = new PacketRecorder(_recorderStream);
-                    _packetRecorderWorker.Start();
-                }
-            }
-        }
-
-        private void btnStopRecording_Click(object sender, EventArgs e)
-        {
-            StopRecording();
-        }
-
-        private void btnReplay_Click(object sender, EventArgs e)
-        {
-            using (var dialog = new OpenFileDialog {DefaultExt = ARDroneTrackFileExt, Filter = ARDroneTrackFilesFilter})
-            {
-                if (dialog.ShowDialog(this) == DialogResult.OK)
-                {
-                    StopRecording();
-
-                    var playerForm = new PlayerForm {FileName = dialog.FileName};
-                    playerForm.Closed += (o, args) => _playerForms.Remove(o as PlayerForm);
-                    _playerForms.Add(playerForm);
-                    playerForm.Show(this);
-                }
-            }
-        }
-
-        // Make sure '_autopilot' variable is initialized with an object
-        private void CreateAutopilot()
-        {
-            if (_autopilot != null) return;
-
-            _autopilot = new Autopilot(_droneClient);
-            _autopilot.OnOutOfObjectives += Autopilot_OnOutOfObjectives;
-            _autopilot.BindToClient();
-            _autopilot.Start();
-        }
-
-        // Event that occurs when no objectives are waiting in the autopilot queue
-        private void Autopilot_OnOutOfObjectives()
-        {
-            _autopilot.Active = false;
-        }
-
-        // Create a simple mission for autopilot
-        private void CreateAutopilotMission()
-        {
-            _autopilot.ClearObjectives();
-
-            // Do two 36 degrees turns left and right if the drone is already flying
-            if (_droneClient.NavigationData.State.HasFlag(NavigationState.Flying))
-            {
-                const float turn = (float)(Math.PI / 5);
-                float heading = _droneClient.NavigationData.Yaw;
-
-                _autopilot.EnqueueObjective(Objective.Create(2000, new Heading(heading + turn, aCanBeObtained: true)));
-                _autopilot.EnqueueObjective(Objective.Create(2000, new Heading(heading - turn, aCanBeObtained: true)));
-                _autopilot.EnqueueObjective(Objective.Create(2000, new Heading(heading, aCanBeObtained: true)));
-            }
-            else // Just take off if the drone is on the ground
-            {
-                _autopilot.EnqueueObjective(new FlatTrim(1000));
-                _autopilot.EnqueueObjective(new Takeoff(3500));
-            }
-
-            // One could use hover, but the method below, allows to gain/lose/maintain desired altitude
-            _autopilot.EnqueueObjective(
-                Objective.Create(3000,
-                    new VelocityX(0.0f),
-                    new VelocityY(0.0f),
-                    new Altitude(1.0f)
-                )
-            );
-
-            _autopilot.EnqueueObjective(new Land(5000));
-        }
-
-        // Activate/deactive autopilot
-        private void btnAutopilot_Click(object sender, EventArgs e)
-        {
-            if (!_droneClient.IsActive) return;
-
-            CreateAutopilot();
-            if (_autopilot.Active) _autopilot.Active = false;
-            else
-            {
-                CreateAutopilotMission();
-                _autopilot.Active = true;
-                btnAutopilot.ForeColor = Color.Red;
-            }
-        }
     }
 }
