@@ -19,7 +19,7 @@ using AR.Drone.Avionics;
 using AR.Drone.Avionics.Objectives;
 using AR.Drone.Avionics.Objectives.IntentObtainers;
 
-namespace AR.Drone.WinApp
+namespace AR.Drone.Guide
 {
     public partial class MainForm : Form
     {
@@ -27,7 +27,6 @@ namespace AR.Drone.WinApp
         private const string ARDroneTrackFilesFilter = "AR.Drone track files (*.ardrone)|*.ardrone";
 
         private readonly DroneClient _droneClient;
-        private readonly List<PlayerForm> _playerForms;
         private readonly VideoPacketDecoderWorker _videoPacketDecoderWorker;
         private Settings _settings;
         private VideoFrame _frame;
@@ -51,8 +50,6 @@ namespace AR.Drone.WinApp
 
             tmrStateUpdate.Enabled = true;
             tmrVideoUpdate.Enabled = true;
-
-            _playerForms = new List<PlayerForm>();
 
             _videoPacketDecoderWorker.UnhandledException += UnhandledException;
         }
@@ -225,46 +222,6 @@ namespace AR.Drone.WinApp
             _droneClient.Hover();
         }
 
-        private void btnUp_Click(object sender, EventArgs e)
-        {
-            _droneClient.Progress(FlightMode.Progressive, gaz: 0.25f);
-        }
-
-        private void btnDown_Click(object sender, EventArgs e)
-        {
-            _droneClient.Progress(FlightMode.Progressive, gaz: -0.25f);
-        }
-
-        private void btnTurnLeft_Click(object sender, EventArgs e)
-        {
-            _droneClient.Progress(FlightMode.Progressive, yaw: 0.25f);
-        }
-
-        private void btnTurnRight_Click(object sender, EventArgs e)
-        {
-            _droneClient.Progress(FlightMode.Progressive, yaw: -0.25f);
-        }
-
-        private void btnLeft_Click(object sender, EventArgs e)
-        {
-            _droneClient.Progress(FlightMode.Progressive, roll: -0.05f);
-        }
-
-        private void btnRight_Click(object sender, EventArgs e)
-        {
-            _droneClient.Progress(FlightMode.Progressive, roll: 0.05f);
-        }
-
-        private void btnForward_Click(object sender, EventArgs e)
-        {
-            _droneClient.Progress(FlightMode.Progressive, pitch: -0.05f);
-        }
-
-        private void btnBack_Click(object sender, EventArgs e)
-        {
-            _droneClient.Progress(FlightMode.Progressive, pitch: 0.05f);
-        }
-
         private void btnReadConfig_Click(object sender, EventArgs e)
         {
             Task<Settings> configurationTask = _droneClient.GetConfigurationTask();
@@ -317,6 +274,9 @@ namespace AR.Drone.WinApp
                     settings.Video.Bitrate = 1000;
                     settings.Video.MaxBitrate = 2000;
 
+                    settings.Detect.Type = 13;
+                    settings.Detect.EnemyColors = 3;
+
                     //settings.Leds.LedAnimation = new LedAnimation(LedAnimationType.BlinkGreenRed, 2.0f, 2);
                     //settings.Control.FlightAnimation = new FlightAnimation(FlightAnimationType.Wave);
 
@@ -334,6 +294,16 @@ namespace AR.Drone.WinApp
                     _droneClient.Send(settings);
                 });
             sendConfigTask.Start();
+        }
+
+        //Send the configuration settings for the guide (turn on tag detection mainly)
+        private void btn_sendGuideConfig_Click(object sender, EventArgs e)
+        {
+            var configuration = new Settings();
+            configuration.Detect.Type = 13;
+            configuration.Detect.EnemyColors = 3;
+            configuration.Leds.LedAnimation = new LedAnimation(LedAnimationType.BlinkGreenRed, 2.0f, 5);
+            _droneClient.Send(configuration);
         }
 
 

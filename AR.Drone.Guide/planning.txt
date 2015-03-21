@@ -1,0 +1,41 @@
+States:
+	Landed - drone has config values, is still on the ground
+	Takeoff - drone is taking off
+	Searching - drone is searching for tags
+		-Set LEDs to flashing red/green?
+		-Hovering during this, attempt to have 0 velocity
+		-If no target found for 3 seconds, land?
+	TrackingHover - drone found tags, target is within "dead zone" of distance (dist = 0 to desiredDistance)
+	TrackingChase - drone detects target is further away than desiredDistance, sets target velocity
+
+Notes on states:
+	We update the state and target velocity when we acquire a new video packet, since that's when we can judge the current state of the environment (wait, maybe this is not true... we get nb_detected and general detection stuff in navdata, so maybe we do everything there?)
+
+	We update the actual tilt value (using the Progress command) when we receive a new navigationpacket, since those are slightly more frequent and give us a good idea of our actual velocity.
+
+	If the target is lost for 1-3 seconds (video packets are being received, but no target is found), then the drone should go to the "Searching" state and stop
+
+For velocity stuff:
+	We'll have a "target velocity" that will be either static (simple) or based on the target's estimated velocity (complex).  This is based on the distance that the detection in the drone gives us.
+	
+	We'll determine the tilt of the drone by the target velocity.  We'll have some sort of "max-tilt" value, and then proportionally set the tilt based on the difference between the current velocity and the target velocity.
+	
+Useful things that we might want to measure:
+	Time since last packet
+		Average time since last packet?
+	Difference in velocities between packets (maybe? to detect acceleration on the drone?)
+	Difference in detected distances between packets (to estimate runner velocity)
+	
+Parameters to tweak:
+	-Target distance / desired distance - distance that the drone is trying to maintain from the target
+	-Emergency distance - distance that is too close and the drone needs to back the fuck up or land.
+	-Max tilt value (has to be a float value between 0 and 1) - maximum value to use to send to the drone.
+	-Max Velocity - maximum value to use for target velocity 
+	-Target Velocity (for simple mode, or maybe for the initial velocity before we know the runner's actual velocity)
+	
+	
+	
+	
+	
+	
+	

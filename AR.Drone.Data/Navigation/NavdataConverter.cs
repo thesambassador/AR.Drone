@@ -1,5 +1,6 @@
 ﻿using System;
 using AR.Drone.Data.Navigation.Native;
+using AR.Drone.Data.Navigation.Native.Options;
 
 namespace AR.Drone.Data.Navigation
 {
@@ -45,6 +46,9 @@ namespace AR.Drone.Data.Navigation
 
             navigationData.Wifi.LinkQuality = 1.0f - ConversionHelper.ToSingle(navdataBag.wifi.link_quality);
 
+
+            navigationData.Vision = ConvertToVisionDetect(navdataBag.vision_detect);
+
             return navigationData;
         }
 
@@ -88,6 +92,35 @@ namespace AR.Drone.Data.Navigation
                     state |= NavigationState.Hovering;
                     break;
             }
+        }
+
+        private static unsafe VisionDetect ConvertToVisionDetect(navdata_vision_detect_t rawDetect)
+        {
+            VisionDetect result = new VisionDetect();
+
+            result.tag = rawDetect.tag;
+            result.size = rawDetect.size;
+            result.nb_detected = rawDetect.nb_detected;
+            result.type = new uint[4];
+            result.xc = new uint[4];
+            result.yc = new uint[4];
+            result.width = new uint[4];
+            result.height = new uint[4];
+            result.dist = new uint[4];
+            result.orientation_angle = new float[4];
+
+            for (int i = 0; i < rawDetect.nb_detected; i++)
+            {
+                result.type[i] = rawDetect.type[i];
+                result.xc[i] = rawDetect.xc[i];
+                result.yc[i] = rawDetect.yc[i];
+                result.width[i] = rawDetect.width[i];
+                result.height[i] = rawDetect.height[i];
+                result.dist[i] = rawDetect.dist[i];
+                result.orientation_angle[i] = rawDetect.orientation_angle[i];
+            }
+
+            return result;
         }
     }
 }

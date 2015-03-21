@@ -1,4 +1,4 @@
-﻿namespace AR.Drone.WinApp
+﻿namespace AR.Drone.Guide
 {
     partial class MainForm
     {
@@ -38,20 +38,14 @@
             this.btnEmergency = new System.Windows.Forms.Button();
             this.tmrStateUpdate = new System.Windows.Forms.Timer(this.components);
             this.btnSwitchCam = new System.Windows.Forms.Button();
-            this.btnUp = new System.Windows.Forms.Button();
-            this.btnDown = new System.Windows.Forms.Button();
-            this.btnLeft = new System.Windows.Forms.Button();
-            this.btnBack = new System.Windows.Forms.Button();
-            this.btnRight = new System.Windows.Forms.Button();
-            this.btnForward = new System.Windows.Forms.Button();
-            this.btnTurnLeft = new System.Windows.Forms.Button();
-            this.btnTurnRight = new System.Windows.Forms.Button();
             this.btnHover = new System.Windows.Forms.Button();
             this.tvInfo = new System.Windows.Forms.TreeView();
             this.tmrVideoUpdate = new System.Windows.Forms.Timer(this.components);
             this.btnReset = new System.Windows.Forms.Button();
             this.btnReadConfig = new System.Windows.Forms.Button();
             this.btnSendConfig = new System.Windows.Forms.Button();
+            this.btn_sendGuideConfig = new System.Windows.Forms.Button();
+            this.btn_startGuide = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pbVideo)).BeginInit();
             this.SuspendLayout();
             // 
@@ -61,7 +55,7 @@
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(75, 23);
             this.btnStart.TabIndex = 0;
-            this.btnStart.Text = "Activate";
+            this.btnStart.Text = "Connect";
             this.btnStart.UseVisualStyleBackColor = true;
             this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
             // 
@@ -71,7 +65,7 @@
             this.btnStop.Name = "btnStop";
             this.btnStop.Size = new System.Drawing.Size(75, 23);
             this.btnStop.TabIndex = 1;
-            this.btnStop.Text = "Deactivate";
+            this.btnStop.Text = "Disconnect";
             this.btnStop.UseVisualStyleBackColor = true;
             this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
             // 
@@ -139,86 +133,6 @@
             this.btnSwitchCam.UseVisualStyleBackColor = true;
             this.btnSwitchCam.Click += new System.EventHandler(this.btnSwitchCam_Click);
             // 
-            // btnUp
-            // 
-            this.btnUp.Location = new System.Drawing.Point(174, 441);
-            this.btnUp.Name = "btnUp";
-            this.btnUp.Size = new System.Drawing.Size(75, 23);
-            this.btnUp.TabIndex = 9;
-            this.btnUp.Text = "Up";
-            this.btnUp.UseVisualStyleBackColor = true;
-            this.btnUp.Click += new System.EventHandler(this.btnUp_Click);
-            // 
-            // btnDown
-            // 
-            this.btnDown.Location = new System.Drawing.Point(174, 471);
-            this.btnDown.Name = "btnDown";
-            this.btnDown.Size = new System.Drawing.Size(75, 23);
-            this.btnDown.TabIndex = 10;
-            this.btnDown.Text = "Down";
-            this.btnDown.UseVisualStyleBackColor = true;
-            this.btnDown.Click += new System.EventHandler(this.btnDown_Click);
-            // 
-            // btnLeft
-            // 
-            this.btnLeft.Location = new System.Drawing.Point(256, 471);
-            this.btnLeft.Name = "btnLeft";
-            this.btnLeft.Size = new System.Drawing.Size(75, 23);
-            this.btnLeft.TabIndex = 11;
-            this.btnLeft.Text = "Left";
-            this.btnLeft.UseVisualStyleBackColor = true;
-            this.btnLeft.Click += new System.EventHandler(this.btnLeft_Click);
-            // 
-            // btnBack
-            // 
-            this.btnBack.Location = new System.Drawing.Point(338, 470);
-            this.btnBack.Name = "btnBack";
-            this.btnBack.Size = new System.Drawing.Size(75, 23);
-            this.btnBack.TabIndex = 12;
-            this.btnBack.Text = "Back";
-            this.btnBack.UseVisualStyleBackColor = true;
-            this.btnBack.Click += new System.EventHandler(this.btnBack_Click);
-            // 
-            // btnRight
-            // 
-            this.btnRight.Location = new System.Drawing.Point(420, 470);
-            this.btnRight.Name = "btnRight";
-            this.btnRight.Size = new System.Drawing.Size(75, 23);
-            this.btnRight.TabIndex = 13;
-            this.btnRight.Text = "Right";
-            this.btnRight.UseVisualStyleBackColor = true;
-            this.btnRight.Click += new System.EventHandler(this.btnRight_Click);
-            // 
-            // btnForward
-            // 
-            this.btnForward.Location = new System.Drawing.Point(338, 441);
-            this.btnForward.Name = "btnForward";
-            this.btnForward.Size = new System.Drawing.Size(75, 23);
-            this.btnForward.TabIndex = 14;
-            this.btnForward.Text = "Forward";
-            this.btnForward.UseVisualStyleBackColor = true;
-            this.btnForward.Click += new System.EventHandler(this.btnForward_Click);
-            // 
-            // btnTurnLeft
-            // 
-            this.btnTurnLeft.Location = new System.Drawing.Point(257, 442);
-            this.btnTurnLeft.Name = "btnTurnLeft";
-            this.btnTurnLeft.Size = new System.Drawing.Size(75, 23);
-            this.btnTurnLeft.TabIndex = 15;
-            this.btnTurnLeft.Text = "Turn Left";
-            this.btnTurnLeft.UseVisualStyleBackColor = true;
-            this.btnTurnLeft.Click += new System.EventHandler(this.btnTurnLeft_Click);
-            // 
-            // btnTurnRight
-            // 
-            this.btnTurnRight.Location = new System.Drawing.Point(419, 442);
-            this.btnTurnRight.Name = "btnTurnRight";
-            this.btnTurnRight.Size = new System.Drawing.Size(75, 23);
-            this.btnTurnRight.TabIndex = 16;
-            this.btnTurnRight.Text = "Turn Right";
-            this.btnTurnRight.UseVisualStyleBackColor = true;
-            this.btnTurnRight.Click += new System.EventHandler(this.btnTurnRight_Click);
-            // 
             // btnHover
             // 
             this.btnHover.Location = new System.Drawing.Point(338, 407);
@@ -274,24 +188,37 @@
             this.btnSendConfig.UseVisualStyleBackColor = true;
             this.btnSendConfig.Click += new System.EventHandler(this.btnSendConfig_Click);
             // 
+            // btn_sendGuideConfig
+            // 
+            this.btn_sendGuideConfig.Location = new System.Drawing.Point(174, 12);
+            this.btn_sendGuideConfig.Name = "btn_sendGuideConfig";
+            this.btn_sendGuideConfig.Size = new System.Drawing.Size(89, 23);
+            this.btn_sendGuideConfig.TabIndex = 22;
+            this.btn_sendGuideConfig.Text = "Guide Config";
+            this.btn_sendGuideConfig.UseVisualStyleBackColor = true;
+            this.btn_sendGuideConfig.Click += new System.EventHandler(this.btn_sendGuideConfig_Click);
+            // 
+            // btn_startGuide
+            // 
+            this.btn_startGuide.Location = new System.Drawing.Point(269, 12);
+            this.btn_startGuide.Name = "btn_startGuide";
+            this.btn_startGuide.Size = new System.Drawing.Size(89, 23);
+            this.btn_startGuide.TabIndex = 23;
+            this.btn_startGuide.Text = "Start Guide";
+            this.btn_startGuide.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(964, 533);
+            this.Controls.Add(this.btn_startGuide);
+            this.Controls.Add(this.btn_sendGuideConfig);
             this.Controls.Add(this.btnSendConfig);
             this.Controls.Add(this.btnReadConfig);
             this.Controls.Add(this.btnReset);
             this.Controls.Add(this.tvInfo);
             this.Controls.Add(this.btnHover);
-            this.Controls.Add(this.btnTurnRight);
-            this.Controls.Add(this.btnTurnLeft);
-            this.Controls.Add(this.btnForward);
-            this.Controls.Add(this.btnRight);
-            this.Controls.Add(this.btnBack);
-            this.Controls.Add(this.btnLeft);
-            this.Controls.Add(this.btnDown);
-            this.Controls.Add(this.btnUp);
             this.Controls.Add(this.btnSwitchCam);
             this.Controls.Add(this.btnEmergency);
             this.Controls.Add(this.button3);
@@ -318,20 +245,14 @@
         private System.Windows.Forms.Button btnEmergency;
         private System.Windows.Forms.Timer tmrStateUpdate;
         private System.Windows.Forms.Button btnSwitchCam;
-        private System.Windows.Forms.Button btnUp;
-        private System.Windows.Forms.Button btnDown;
-        private System.Windows.Forms.Button btnLeft;
-        private System.Windows.Forms.Button btnBack;
-        private System.Windows.Forms.Button btnRight;
-        private System.Windows.Forms.Button btnForward;
-        private System.Windows.Forms.Button btnTurnLeft;
-        private System.Windows.Forms.Button btnTurnRight;
         private System.Windows.Forms.Button btnHover;
         private System.Windows.Forms.TreeView tvInfo;
         private System.Windows.Forms.Timer tmrVideoUpdate;
         private System.Windows.Forms.Button btnReset;
         private System.Windows.Forms.Button btnReadConfig;
         private System.Windows.Forms.Button btnSendConfig;
+        private System.Windows.Forms.Button btn_sendGuideConfig;
+        private System.Windows.Forms.Button btn_startGuide;
     }
 }
 

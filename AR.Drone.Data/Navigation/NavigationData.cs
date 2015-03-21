@@ -15,6 +15,7 @@ namespace AR.Drone.Data.Navigation
         public float Time; // seconds
         public Video Video;
         public Wifi Wifi;
+        public VisionDetect Vision;
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -70,5 +71,21 @@ namespace AR.Drone.Data.Navigation
         {
             return string.Format("{{FrameNumber:{0}}}", FrameNumber);
         }
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct VisionDetect
+    {
+        public ushort tag;
+        public ushort size;
+        public uint nb_detected;
+        public uint[] type; // <Ctype "c_uint32 * 4">
+        public uint[] xc; // <Ctype "c_uint32 * 4">
+        public uint[] yc; // <Ctype "c_uint32 * 4">
+        public uint[] width; // <Ctype "c_uint32 * 4">
+        public uint[] height; // <Ctype "c_uint32 * 4">
+        public uint[] dist; // <Ctype "c_uint32 * 4">
+        public float[] orientation_angle; // <Ctype "float32_t * 4">
+
     }
 }
