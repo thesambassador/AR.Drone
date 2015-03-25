@@ -44,22 +44,26 @@ namespace AR.Drone.Guide
             }
         }
 
+        private NavigationData _lastNavData;
         private NavigationData _navData;
         private DroneClient _droneClient;
 
         public float TargetDistance = 1800; //distance that we want the target to be from the drone
         public float EmergencyDistance = 500; //distance that results in an emergency landing or backing off (if the drone gets too close)
         public float MaxTilt = .05f; //max tilt value (between 0.0 and 1.0) that we can use to send to the drone
-        public float MaxVelocity; //maximum velocity we want the drone to go
-        public float ChaseVelocity; //static velocity we want the drone to acheive if we don't have an estimate of how fast the runner is moving
+        public float MaxVelocity = 2; //maximum velocity we want the drone to go
+        public float ChaseVelocity = 2; //static velocity we want the drone to acheive if we don't have an estimate of how fast the runner is moving
         public float DetectionTime = 1; //amount of uninterupted tag detection that we need to progress from 'Searching' to 'tracking'
 
         public GuideState state = GuideState.None;
 
-        private float _timeSinceLastNavPacket;
+        private double _timeSinceLastNavPacket;
+        private DateTime _timeLastNavPacketReceived;
         private float _detectionTime; //time since we got a navigation data packet that had tag detection
 
         private float _targetVelocityX;
+
+        public float EstRunnerSpeed = 0.0f;
 
         public GuideWorker(DroneClient droneClient)
         {
@@ -70,7 +74,7 @@ namespace AR.Drone.Guide
             _targetVelocityX = ChaseVelocity;
         }
 
-        //Actual driver of the guide drone
+        //Actual driver of the guide drone, not doing anything right now
         protected override void Loop(System.Threading.CancellationToken token)
         {
             while (!token.IsCancellationRequested)
@@ -90,6 +94,11 @@ namespace AR.Drone.Guide
         //Every time we get data from the drone, this is called.
         private void NavigationDataAcquired(NavigationData aPacket)
         {
+            _lastNavData = _navData;
+
+            _timeSinceLastNavPacket = DateTime.Now.Subtract(_timeLastNavPacketReceived).TotalSeconds;
+            _timeLastNavPacketReceived = DateTime.Now;
+
             _navData = aPacket;
             ProcessState();
         }

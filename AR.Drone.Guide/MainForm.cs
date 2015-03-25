@@ -166,6 +166,15 @@ namespace AR.Drone.Guide
             }
             tvInfo.EndUpdate();
 
+            if (_navigationData.Vision.nb_detected == 1)
+                lbl_tagDistText.Text = _navigationData.Vision.dist[0].ToString();
+            else
+                lbl_tagDistText.Text = "---";
+
+            if (_guideWorker != null)
+            {
+                lbl_runnerSpeed.Text = _guideWorker.EstRunnerSpeed.ToString();
+            }
         }
 
         private void DumpBranch(TreeNodeCollection nodes, object o)
@@ -331,6 +340,36 @@ namespace AR.Drone.Guide
                 _guideWorker.Activate();
                 _guideWorker.Start();
             }
+        }
+
+        private void txt_targetDist_TextChanged(object sender, EventArgs e)
+        {
+            if (_guideWorker != null)
+                float.TryParse(txt_targetDist.Text, out _guideWorker.TargetDistance);
+        }
+
+        private void txt_maxTilt_TextChanged(object sender, EventArgs e)
+        {
+            if (_guideWorker != null)
+                float.TryParse(txt_maxTilt.Text, out _guideWorker.MaxTilt);
+        }
+
+        private void txt_maxVel_TextChanged(object sender, EventArgs e)
+        {
+            if (_guideWorker != null)
+                float.TryParse(txt_maxVel.Text, out _guideWorker.MaxVelocity);
+        }
+
+        private void txt_chaseVel_TextChanged(object sender, EventArgs e)
+        {
+            if (_guideWorker != null)
+                float.TryParse(txt_chaseVel.Text, out _guideWorker.ChaseVelocity);
+        }
+
+        private void txt_DetectTime_TextChanged(object sender, EventArgs e)
+        {
+            if (_guideWorker != null)
+                float.TryParse(txt_DetectTime.Text, out _guideWorker.DetectionTime);
         }
 
 
