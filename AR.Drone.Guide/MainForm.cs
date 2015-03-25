@@ -375,6 +375,13 @@ namespace AR.Drone.Guide
                 float.TryParse(txt_DetectTime.Text, out _guideWorker.DetectionTime);
         }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            _guideWorker.Deactivate();
+            _guideWorker.Stop();
+            _droneClient.Land();
+        }
+
 
 
        
