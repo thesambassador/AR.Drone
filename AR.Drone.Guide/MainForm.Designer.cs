@@ -190,6 +190,7 @@
             // 
             // btn_sendGuideConfig
             // 
+            this.btn_sendGuideConfig.Enabled = false;
             this.btn_sendGuideConfig.Location = new System.Drawing.Point(174, 12);
             this.btn_sendGuideConfig.Name = "btn_sendGuideConfig";
             this.btn_sendGuideConfig.Size = new System.Drawing.Size(89, 23);
@@ -200,12 +201,14 @@
             // 
             // btn_startGuide
             // 
+            this.btn_startGuide.Enabled = false;
             this.btn_startGuide.Location = new System.Drawing.Point(269, 12);
             this.btn_startGuide.Name = "btn_startGuide";
             this.btn_startGuide.Size = new System.Drawing.Size(89, 23);
             this.btn_startGuide.TabIndex = 23;
             this.btn_startGuide.Text = "Start Guide";
             this.btn_startGuide.UseVisualStyleBackColor = true;
+            this.btn_startGuide.Click += new System.EventHandler(this.btn_startGuide_Click);
             // 
             // MainForm
             // 

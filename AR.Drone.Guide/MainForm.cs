@@ -36,6 +36,8 @@ namespace AR.Drone.Guide
         private NavigationPacket _navigationPacket;
         private PacketRecorder _packetRecorderWorker;
 
+        private GuideWorker _guideWorker;
+
         public MainForm()
         {
             InitializeComponent();
@@ -68,6 +70,12 @@ namespace AR.Drone.Guide
         protected override void OnClosed(EventArgs e)
         {
 
+            if (_guideWorker != null)
+            {
+                _guideWorker.Deactivate();
+                _guideWorker.Stop();
+            }
+
             _droneClient.Dispose();
             _videoPacketDecoderWorker.Dispose();
 
@@ -93,16 +101,25 @@ namespace AR.Drone.Guide
         private void OnVideoPacketDecoded(VideoFrame frame)
         {
             _frame = frame;
+
+            //send video frame to GuideWorker
+            if(_guideWorker != null)
+                _guideWorker.VideoPacketDecoded(frame);
+
         }
 
         private void btnStart_Click(object sender, EventArgs e)
         {
             _droneClient.Start();
+            btn_startGuide.Enabled = true;
+            btn_sendGuideConfig.Enabled = true;
         }
 
         private void btnStop_Click(object sender, EventArgs e)
         {
             _droneClient.Stop();
+            btn_startGuide.Enabled = false;
+            btn_sendGuideConfig.Enabled = false;
         }
 
         private void tmrVideoUpdate_Tick(object sender, EventArgs e)
@@ -299,11 +316,21 @@ namespace AR.Drone.Guide
         //Send the configuration settings for the guide (turn on tag detection mainly)
         private void btn_sendGuideConfig_Click(object sender, EventArgs e)
         {
-            var configuration = new Settings();
-            configuration.Detect.Type = 13;
-            configuration.Detect.EnemyColors = 3;
-            configuration.Leds.LedAnimation = new LedAnimation(LedAnimationType.BlinkGreenRed, 2.0f, 5);
-            _droneClient.Send(configuration);
+           
+        }
+
+        //start the guide
+        private void btn_startGuide_Click(object sender, EventArgs e)
+        {
+            if (_guideWorker == null)
+            {
+                _guideWorker = new GuideWorker(_droneClient);
+            }
+            else
+            {
+                _guideWorker.Activate();
+                _guideWorker.Start();
+            }
         }
 
 
