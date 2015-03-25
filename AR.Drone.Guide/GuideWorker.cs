@@ -192,7 +192,7 @@ namespace AR.Drone.Guide
             //gotta find the tag for a couple seconds
             if (_navData.Vision.nb_detected >= 1)
             {
-                _detectionTime += _timeSinceLastNavPacket;
+                _detectionTime += (float)_timeSinceLastNavPacket;
 
                 if (_detectionTime >= DetectionTime)
                 {

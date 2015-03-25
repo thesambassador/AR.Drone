@@ -166,14 +166,17 @@ namespace AR.Drone.Guide
             }
             tvInfo.EndUpdate();
 
-            if (_navigationData.Vision.nb_detected == 1)
-                lbl_tagDistText.Text = _navigationData.Vision.dist[0].ToString();
-            else
-                lbl_tagDistText.Text = "---";
-
-            if (_guideWorker != null)
+            if (_navigationData != null)
             {
-                lbl_runnerSpeed.Text = _guideWorker.EstRunnerSpeed.ToString();
+                if (_navigationData.Vision.nb_detected == 1)
+                    lbl_tagDistText.Text = _navigationData.Vision.dist[0].ToString();
+                else
+                    lbl_tagDistText.Text = "---";
+
+                if (_guideWorker != null)
+                {
+                    lbl_runnerSpeed.Text = _guideWorker.EstRunnerSpeed.ToString();
+                }
             }
         }
 
