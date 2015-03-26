@@ -10,6 +10,7 @@ using AR.Drone.Data.Navigation;
 using AR.Drone.Infrastructure;
 using AR.Drone.Video;
 using AR.Drone.Client.Configuration;
+using System.Windows.Forms;
 
 namespace AR.Drone.Guide
 {
@@ -54,6 +55,8 @@ namespace AR.Drone.Guide
         public float MaxVelocity = 2; //maximum velocity we want the drone to go
         public float ChaseVelocity = 2; //static velocity we want the drone to acheive if we don't have an estimate of how fast the runner is moving
         public float DetectionTime = 1; //amount of uninterupted tag detection that we need to progress from 'Searching' to 'tracking'
+
+        public Label StateTextLabel;
 
         public GuideState state = GuideState.None;
 
@@ -149,18 +152,23 @@ namespace AR.Drone.Guide
             switch (state)
             {
                 case GuideState.Init:
+                    StateTextLabel.Text = "Init";
                     StateInit();
                     break;
                 case GuideState.Takeoff:
+                    StateTextLabel.Text = "Takeoff";
                     StateTakeoff();
                     break;
                 case GuideState.Searching:
+                    StateTextLabel.Text = "Searching";
                     StateSearching();
                     break;
                 case GuideState.TrackingHover:
+                    StateTextLabel.Text = "TrackingHover";
                     StateTrackingHover();
                     break;
                 case GuideState.TrackingChase:
+                    StateTextLabel.Text = "TrackingChase";
                     StateTrackingChase();
                     break;
             }

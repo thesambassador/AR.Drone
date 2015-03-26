@@ -112,7 +112,6 @@ namespace AR.Drone.Guide
         private void btnStart_Click(object sender, EventArgs e)
         {
             _droneClient.Start();
-            btn_startGuide.Enabled = true;
             btn_sendGuideConfig.Enabled = true;
         }
 
@@ -331,19 +330,17 @@ namespace AR.Drone.Guide
         //Send the configuration settings for the guide (turn on tag detection mainly)
         private void btn_sendGuideConfig_Click(object sender, EventArgs e)
         {
-            var configuration = new Settings();
-            configuration.Detect.Type = 13;
-            configuration.Detect.EnemyColors = 3;
-            _droneClient.Send(configuration);
+            if (_guideWorker == null)
+            {
+                _guideWorker = new GuideWorker(_droneClient);
+                _guideWorker.StateTextLabel = txt_currentState;
+            }
+            btn_startGuide.Enabled = true;
         }
 
         //start the guide
         private void btn_startGuide_Click(object sender, EventArgs e)
         {
-            if (_guideWorker == null)
-            {
-                _guideWorker = new GuideWorker(_droneClient);
-            }
             _guideWorker.Activate();
             _guideWorker.Start();
         }

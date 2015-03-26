@@ -54,6 +54,8 @@
             this.txt_DetectTime = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
+            this.label8 = new System.Windows.Forms.Label();
+            this.txt_currentState = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pbVideo)).BeginInit();
             this.SuspendLayout();
             // 
@@ -133,7 +135,7 @@
             this.btn_sendGuideConfig.Name = "btn_sendGuideConfig";
             this.btn_sendGuideConfig.Size = new System.Drawing.Size(89, 23);
             this.btn_sendGuideConfig.TabIndex = 22;
-            this.btn_sendGuideConfig.Text = "Guide Config";
+            this.btn_sendGuideConfig.Text = "Create Guide";
             this.btn_sendGuideConfig.UseVisualStyleBackColor = true;
             this.btn_sendGuideConfig.Click += new System.EventHandler(this.btn_sendGuideConfig_Click);
             // 
@@ -290,11 +292,34 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label8.Location = new System.Drawing.Point(12, 484);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(102, 20);
+            this.label8.TabIndex = 39;
+            this.label8.Text = "Current state";
+            // 
+            // txt_currentState
+            // 
+            this.txt_currentState.AutoSize = true;
+            this.txt_currentState.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txt_currentState.Location = new System.Drawing.Point(12, 504);
+            this.txt_currentState.Name = "txt_currentState";
+            this.txt_currentState.Size = new System.Drawing.Size(27, 20);
+            this.txt_currentState.TabIndex = 40;
+            this.txt_currentState.Text = "---";
+            this.txt_currentState.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(964, 533);
+            this.Controls.Add(this.txt_currentState);
+            this.Controls.Add(this.label8);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.txt_DetectTime);
             this.Controls.Add(this.label7);
@@ -353,6 +378,8 @@
         private System.Windows.Forms.TextBox txt_DetectTime;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label txt_currentState;
     }
 }
 
