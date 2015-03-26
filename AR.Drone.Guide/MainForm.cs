@@ -103,8 +103,6 @@ namespace AR.Drone.Guide
         {
             _frame = frame;
 
-            drawTagDetection();
-
             //send video frame to GuideWorker
             if(_guideWorker != null)
                 _guideWorker.VideoPacketDecoded(frame);
@@ -135,6 +133,8 @@ namespace AR.Drone.Guide
                 _frameBitmap = VideoHelper.CreateBitmap(ref _frame);
             else
                 VideoHelper.UpdateBitmap(ref _frameBitmap, ref _frame);
+
+            drawTagDetection();
 
             pbVideo.Image = _frameBitmap;
         }
