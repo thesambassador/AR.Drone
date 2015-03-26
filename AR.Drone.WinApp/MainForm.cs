@@ -464,5 +464,31 @@ namespace AR.Drone.WinApp
                 btnAutopilot.ForeColor = Color.Red;
             }
         }
+
+        private void drawTagDetection()
+        {
+            if (_navigationData.Vision.nb_detected > 0)
+            {
+                uint x = _navigationData.Vision.xc[0];
+                uint y = _navigationData.Vision.yc[0];
+                uint w = _navigationData.Vision.width[0];
+                uint h = _navigationData.Vision.height[0];
+                uint dist = _navigationData.Vision.dist[0];
+
+                Graphics g = Graphics.FromImage(_frameBitmap);
+                Pen redPen = new Pen(Color.Red, 3);
+
+                float pixelW = (float)w / 1000 * _frameBitmap.Width;
+                float pixelH = (float)h / 1000 * _frameBitmap.Height;
+
+                float pixelX = (float)x / 1000 * _frameBitmap.Width - (pixelW / 2);
+                float pixelY = (float)y / 1000 * _frameBitmap.Height - (pixelH / 2);
+
+
+                g.DrawRectangle(redPen, pixelX, pixelY, pixelW, pixelH);
+                //g.DrawString("Raw Distance: " + dist.ToString(), DefaultFont, new SolidBrush(Color.Red), 0, 0);
+            }
+
+        }
     }
 }
