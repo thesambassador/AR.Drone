@@ -56,7 +56,8 @@ namespace AR.Drone.Guide
         public float ChaseVelocity = 2; //static velocity we want the drone to acheive if we don't have an estimate of how fast the runner is moving
         public float DetectionTime = 1; //amount of uninterupted tag detection that we need to progress from 'Searching' to 'tracking'
 
-        public Label StateTextLabel;
+        public String StateText;
+
 
         public GuideState state = GuideState.None;
 
@@ -92,6 +93,7 @@ namespace AR.Drone.Guide
                     Thread.Sleep(3);
                 }
             }
+            
         }
 
         //Every time we get data from the drone, this is called.
@@ -103,7 +105,14 @@ namespace AR.Drone.Guide
             _timeLastNavPacketReceived = DateTime.Now;
 
             _navData = aPacket;
-            ProcessState();
+            try
+            {
+                ProcessState();
+            }
+            catch(Exception e)
+            {
+                _droneClient.Land();
+            }
         }
 
         //Every time the video from the drone is decoded, this is called
@@ -152,23 +161,23 @@ namespace AR.Drone.Guide
             switch (state)
             {
                 case GuideState.Init:
-                    StateTextLabel.Text = "Init";
+                    StateText = "Init";
                     StateInit();
                     break;
                 case GuideState.Takeoff:
-                    StateTextLabel.Text = "Takeoff";
+                    StateText = "Takeoff";
                     StateTakeoff();
                     break;
                 case GuideState.Searching:
-                    StateTextLabel.Text = "Searching";
+                    StateText = "Searching";
                     StateSearching();
                     break;
                 case GuideState.TrackingHover:
-                    StateTextLabel.Text = "TrackingHover";
+                    StateText = "TrackingHover";
                     StateTrackingHover();
                     break;
                 case GuideState.TrackingChase:
-                    StateTextLabel.Text = "TrackingChase";
+                    StateText = "TrackingChase";
                     StateTrackingChase();
                     break;
             }
