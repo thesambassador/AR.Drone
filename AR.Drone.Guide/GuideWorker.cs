@@ -56,6 +56,8 @@ namespace AR.Drone.Guide
         public float ChaseVelocity = 2; //static velocity we want the drone to acheive if we don't have an estimate of how fast the runner is moving
         public float DetectionTime = 1; //amount of uninterupted tag detection that we need to progress from 'Searching' to 'tracking'
 
+        public float ElevationTarget = 1.5f;
+
         public String StateText;
 
 
@@ -186,7 +188,7 @@ namespace AR.Drone.Guide
         //Initial state, just sends the "takeoff" request once and then transitions to taking off
         private void StateInit()
         {
-            _droneClient.Takeoff();
+            //_droneClient.Takeoff();
             state = GuideState.Takeoff;
         }
 
@@ -194,7 +196,7 @@ namespace AR.Drone.Guide
         //Once we detect that we are flying, we just switch to searching
         private void StateTakeoff()
         {
-            if (_navData.State.HasFlag(NavigationState.Flying))
+            if (_navData.Altitude >= ElevationTarget)
             {
                 LEDPattern();
                 state = GuideState.Searching;
@@ -237,7 +239,7 @@ namespace AR.Drone.Guide
                 }
                 else
                 {
-                    _droneClient.Hover();
+                    //_droneClient.Hover();
                 }
             }
         }
@@ -250,7 +252,7 @@ namespace AR.Drone.Guide
                 if (_navData.Vision.dist[0] <= TargetDistance)
                 {
                     state = GuideState.TrackingHover;
-                    _droneClient.Hover();
+                    //_droneClient.Hover();
                 }
                 //otherwise, we'll need to move backwards
                 else
@@ -271,7 +273,7 @@ namespace AR.Drone.Guide
                         targetTilt = MaxTilt;
                     }
 
-                    _droneClient.Progress(FlightMode.Progressive, pitch: targetTilt);
+                    //_droneClient.Progress(FlightMode.Progressive, pitch: targetTilt);
 
                 }
             }

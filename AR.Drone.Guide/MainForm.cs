@@ -178,6 +178,7 @@ namespace AR.Drone.Guide
                 if (_guideWorker != null)
                 {
                     lbl_runnerSpeed.Text = _guideWorker.EstRunnerSpeed.ToString();
+                    txt_currentState.Text = _guideWorker.StateText;
                 }
             }
         }
@@ -333,7 +334,6 @@ namespace AR.Drone.Guide
             if (_guideWorker == null)
             {
                 _guideWorker = new GuideWorker(_droneClient);
-                _guideWorker.StateTextLabel = txt_currentState;
             }
             btn_startGuide.Enabled = true;
         }
@@ -342,7 +342,7 @@ namespace AR.Drone.Guide
         private void btn_startGuide_Click(object sender, EventArgs e)
         {
             _guideWorker.Activate();
-            _guideWorker.Start();
+            //_guideWorker.Start();
         }
 
         private void txt_targetDist_TextChanged(object sender, EventArgs e)
