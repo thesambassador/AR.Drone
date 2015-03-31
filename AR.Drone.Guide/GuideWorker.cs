@@ -242,16 +242,21 @@ namespace AR.Drone.Guide
                     //trigger the next state action so that we don't have to wait for another navigation packet to actually move
                     StateTrackingChase();
                 }
-                //we lost the tag, don't disable immediately, but go back to searching state if we lose enough packets in a row
                 else
                 {
-                    _noTagDetectionPackets += 1;
-                    if (_noTagDetectionPackets > 10)
-                    {
-                        state = GuideState.Searching;
-                    }
                     //_droneClient.Hover();
                 }
+                
+            }
+            //we lost the tag, don't disable immediately, but go back to searching state if we lose enough packets in a row
+            else
+            {
+                _noTagDetectionPackets += 1;
+                if (_noTagDetectionPackets > 10)
+                {
+                    state = GuideState.Searching;
+                }
+                
             }
         }
 
