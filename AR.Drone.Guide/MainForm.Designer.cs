@@ -270,7 +270,7 @@
             this.txt_DetectTime.Name = "txt_DetectTime";
             this.txt_DetectTime.Size = new System.Drawing.Size(69, 20);
             this.txt_DetectTime.TabIndex = 37;
-            this.txt_DetectTime.Text = "1";
+            this.txt_DetectTime.Text = ".5";
             this.txt_DetectTime.TextChanged += new System.EventHandler(this.txt_DetectTime_TextChanged);
             // 
             // label7
