@@ -131,10 +131,12 @@ namespace AR.Drone.Guide
         {
             if (_navData.Vision.nb_detected == 1)
             {
-                int deltaDist = (int)_navData.Vision.dist[0] - _lastDetectedDistance;
+                int dist =  (int)_navData.Vision.dist[0];
+                int deltaDist = dist - _lastDetectedDistance;
 
                 EstRunnerSpeed = (float)(deltaDist / _timeSinceLastNavPacket);
 
+                _lastDetectedDistance = dist;
             }
         }
 
