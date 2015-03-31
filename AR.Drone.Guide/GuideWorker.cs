@@ -69,10 +69,14 @@ namespace AR.Drone.Guide
 
         private float _targetVelocityX;
 
+        private int _noTagDetectionPackets = 0;
+
         public float EstRunnerSpeed = 0.0f;
 
         public GuideWorker(DroneClient droneClient)
         {
+            _droneClient = droneClient;
+
             _active = false;
             TurnOnTagDetection();
 
@@ -196,11 +200,11 @@ namespace AR.Drone.Guide
         //Once we detect that we are flying, we just switch to searching
         private void StateTakeoff()
         {
-            if (_navData.Altitude >= ElevationTarget)
-            {
+            //if (_navData.Altitude >= ElevationTarget)
+           // {
                 LEDPattern();
                 state = GuideState.Searching;
-            }
+           // }
         }
 
         //Here we are looking for the packets
@@ -231,14 +235,21 @@ namespace AR.Drone.Guide
         {
             if (_navData.Vision.nb_detected >= 1)
             {
-                if (_navData.Vision.dist[0] > TargetDistance)
+                if (_navData.Vision.dist[0] < TargetDistance)
                 {
+                    _noTagDetectionPackets = 0;
                     state = GuideState.TrackingChase;
                     //trigger the next state action so that we don't have to wait for another navigation packet to actually move
                     StateTrackingChase();
                 }
+                //we lost the tag, don't disable immediately, but go back to searching state if we lose enough packets in a row
                 else
                 {
+                    _noTagDetectionPackets += 1;
+                    if (_noTagDetectionPackets > 10)
+                    {
+                        state = GuideState.Searching;
+                    }
                     //_droneClient.Hover();
                 }
             }
@@ -248,8 +259,8 @@ namespace AR.Drone.Guide
         {
             if (_navData.Vision.nb_detected >= 1)
             {
-                //If we are close enough to the target again, switch back to hovering
-                if (_navData.Vision.dist[0] <= TargetDistance)
+                //If we are far enough to the target again, switch back to hovering
+                if (_navData.Vision.dist[0] >= TargetDistance)
                 {
                     state = GuideState.TrackingHover;
                     //_droneClient.Hover();
