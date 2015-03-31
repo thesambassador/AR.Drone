@@ -198,7 +198,7 @@
             this.txt_targetDist.Name = "txt_targetDist";
             this.txt_targetDist.Size = new System.Drawing.Size(69, 20);
             this.txt_targetDist.TabIndex = 28;
-            this.txt_targetDist.Text = "1800";
+            this.txt_targetDist.Text = "50";
             this.txt_targetDist.TextChanged += new System.EventHandler(this.txt_targetDist_TextChanged);
             // 
             // label3
@@ -206,9 +206,9 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(359, 404);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(84, 13);
+            this.label3.Size = new System.Drawing.Size(82, 13);
             this.label3.TabIndex = 29;
-            this.label3.Text = "Target Dist (mm)";
+            this.label3.Text = "Target Dist (cm)";
             // 
             // label4
             // 

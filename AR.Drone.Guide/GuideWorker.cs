@@ -49,7 +49,7 @@ namespace AR.Drone.Guide
         private NavigationData _navData;
         private DroneClient _droneClient;
 
-        public float TargetDistance = 1800; //distance that we want the target to be from the drone
+        public float TargetDistance = 50; //distance that we want the target to be from the drone
         public float EmergencyDistance = 500; //distance that results in an emergency landing or backing off (if the drone gets too close)
         public float MaxTilt = .05f; //max tilt value (between 0.0 and 1.0) that we can use to send to the drone
         public float MaxVelocity = 2; //maximum velocity we want the drone to go
@@ -264,6 +264,7 @@ namespace AR.Drone.Guide
         {
             if (_navData.Vision.nb_detected >= 1)
             {
+                _noTagDetectionPackets = 0;
                 //If we are far enough to the target again, switch back to hovering
                 if (_navData.Vision.dist[0] >= TargetDistance)
                 {
@@ -292,6 +293,16 @@ namespace AR.Drone.Guide
                     //_droneClient.Progress(FlightMode.Progressive, pitch: targetTilt);
 
                 }
+            }
+            //we lost the tag, don't disable immediately, but go back to searching state if we lose enough packets in a row
+            else
+            {
+                _noTagDetectionPackets += 1;
+                if (_noTagDetectionPackets > 10)
+                {
+                    state = GuideState.Searching;
+                }
+
             }
         }
 
