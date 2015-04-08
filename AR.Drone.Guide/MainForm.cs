@@ -54,6 +54,13 @@ namespace AR.Drone.Guide
             tmrVideoUpdate.Enabled = true;
 
             _videoPacketDecoderWorker.UnhandledException += UnhandledException;
+
+            //init values from default values
+            txt_DetectTime.Text = GuideWorker.DetectionTime.ToString();
+            txt_chaseVel.Text = GuideWorker.ChaseVelocity.ToString();
+            txt_maxTilt.Text = GuideWorker.MaxTilt.ToString();
+            txt_maxVel.Text = GuideWorker.MaxVelocity.ToString();
+            txt_targetDist.Text = GuideWorker.TargetDistance.ToString();
         }
 
 
@@ -341,38 +348,41 @@ namespace AR.Drone.Guide
         //start the guide
         private void btn_startGuide_Click(object sender, EventArgs e)
         {
+
             _guideWorker.Activate();
+
+           
             //_guideWorker.Start();
         }
 
         private void txt_targetDist_TextChanged(object sender, EventArgs e)
         {
             if (_guideWorker != null)
-                float.TryParse(txt_targetDist.Text, out _guideWorker.TargetDistance);
+                float.TryParse(txt_targetDist.Text, out GuideWorker.TargetDistance);
         }
 
         private void txt_maxTilt_TextChanged(object sender, EventArgs e)
         {
             if (_guideWorker != null)
-                float.TryParse(txt_maxTilt.Text, out _guideWorker.MaxTilt);
+                float.TryParse(txt_maxTilt.Text, out GuideWorker.MaxTilt);
         }
 
         private void txt_maxVel_TextChanged(object sender, EventArgs e)
         {
             if (_guideWorker != null)
-                float.TryParse(txt_maxVel.Text, out _guideWorker.MaxVelocity);
+                float.TryParse(txt_maxVel.Text, out GuideWorker.MaxVelocity);
         }
 
         private void txt_chaseVel_TextChanged(object sender, EventArgs e)
         {
             if (_guideWorker != null)
-                float.TryParse(txt_chaseVel.Text, out _guideWorker.ChaseVelocity);
+                float.TryParse(txt_chaseVel.Text, out GuideWorker.ChaseVelocity);
         }
 
         private void txt_DetectTime_TextChanged(object sender, EventArgs e)
         {
             if (_guideWorker != null)
-                float.TryParse(txt_DetectTime.Text, out _guideWorker.DetectionTime);
+                float.TryParse(txt_DetectTime.Text, out GuideWorker.DetectionTime);
         }
 
         private void button1_Click(object sender, EventArgs e)

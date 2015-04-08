@@ -49,12 +49,12 @@ namespace AR.Drone.Guide
         private NavigationData _navData;
         private DroneClient _droneClient;
 
-        public float TargetDistance = 50; //distance that we want the target to be from the drone
-        public float EmergencyDistance = 500; //distance that results in an emergency landing or backing off (if the drone gets too close)
-        public float MaxTilt = .05f; //max tilt value (between 0.0 and 1.0) that we can use to send to the drone
-        public float MaxVelocity = 2; //maximum velocity we want the drone to go
-        public float ChaseVelocity = 2; //static velocity we want the drone to acheive if we don't have an estimate of how fast the runner is moving
-        public float DetectionTime = .5f; //amount of uninterupted tag detection that we need to progress from 'Searching' to 'tracking'
+        public static float TargetDistance = 200; //distance that we want the target to be from the drone
+        public static float EmergencyDistance = 500; //distance that results in an emergency landing or backing off (if the drone gets too close)
+        public static float MaxTilt = .05f; //max tilt value (between 0.0 and 1.0) that we can use to send to the drone
+        public static float MaxVelocity = 2; //maximum velocity we want the drone to go
+        public static float ChaseVelocity = 2; //static velocity we want the drone to acheive if we don't have an estimate of how fast the runner is moving
+        public static float DetectionTime = .5f; //amount of uninterupted tag detection that we need to progress from 'Searching' to 'tracking'
 
         public float ElevationTarget = 1.5f;
 
@@ -64,7 +64,7 @@ namespace AR.Drone.Guide
 
         public GuideState state = GuideState.None;
 
-        private double _timeSinceLastNavPacket;
+        private float _timeSinceLastNavPacket;
         private DateTime _timeLastNavPacketReceived;
         private float _detectionTime; //time since we got a navigation data packet that had tag detection
 
@@ -75,6 +75,9 @@ namespace AR.Drone.Guide
         public float EstRunnerSpeed = 0.0f;
 
         private int _lastDetectedDistance = 0;
+
+        private float _waitTimer = 0;
+        private bool _flatTrimDone = false;
 
         public GuideWorker(DroneClient droneClient)
         {
@@ -110,7 +113,7 @@ namespace AR.Drone.Guide
         {
             _lastNavData = _navData;
 
-            _timeSinceLastNavPacket = DateTime.Now.Subtract(_timeLastNavPacketReceived).TotalSeconds;
+            _timeSinceLastNavPacket = (float)DateTime.Now.Subtract(_timeLastNavPacketReceived).TotalSeconds;
             _timeLastNavPacketReceived = DateTime.Now;
 
             _navData = aPacket;
@@ -152,6 +155,8 @@ namespace AR.Drone.Guide
             Active = true;
             _droneClient.NavigationDataAcquired += NavigationDataAcquired;
             state = GuideState.Init;
+            _waitTimer = 0;
+            _flatTrimDone = false;
         }
 
         /// <summary>Disable autopilot</summary>
@@ -167,6 +172,7 @@ namespace AR.Drone.Guide
             var configuration = new Settings();
             configuration.Detect.Type = 13;
             configuration.Detect.EnemyColors = 3;
+
             _droneClient.Send(configuration);
         }
 
@@ -208,12 +214,25 @@ namespace AR.Drone.Guide
             }
         }
 
-        //Initial state, just sends the "takeoff" request once and then transitions to taking off
+        //Initial state, do a flattrim command, wait a second, then just send the "takeoff" request once and then transitions to taking off
         private void StateInit()
         {
-            if(ShouldFly)
-                _droneClient.Takeoff();
-            state = GuideState.Takeoff;
+            if (!_flatTrimDone)
+            {
+                _droneClient.FlatTrim();
+            }
+
+            //just going to wait with this super shitty method for a second to make sure the flattrim request goes through and is registered
+            _waitTimer += _timeSinceLastNavPacket;
+
+            if (_waitTimer > 1)
+            {
+                if (ShouldFly)
+                {
+                    _droneClient.Takeoff();
+                }
+                state = GuideState.Takeoff;
+            }
         }
 
         //Here, we wait until we get a navdata packet that indicates that we are done taking off (state should change to hovering eventually)
@@ -221,7 +240,7 @@ namespace AR.Drone.Guide
         private void StateTakeoff()
         {
             if(!_navData.State.HasFlag(NavigationState.Takeoff) || !ShouldFly){
-                LEDPattern();
+                //once we've taken off, go up until we get to our desired altitude?
                 state = GuideState.Searching;
             }
         }
@@ -232,7 +251,7 @@ namespace AR.Drone.Guide
             if(ShouldFly)
                 _droneClient.Hover();
             //while searching, make the stuff flash
-            LEDPattern();
+            //LEDPattern();
             //gotta find the tag for a couple seconds
             if (_navData.Vision.nb_detected >= 1)
             {
@@ -258,12 +277,11 @@ namespace AR.Drone.Guide
 
             if (_navData.Vision.nb_detected >= 1)
             {
+                _noTagDetectionPackets = 0;
                 if (_navData.Vision.dist[0] < TargetDistance)
                 {
-                    _noTagDetectionPackets = 0;
                     state = GuideState.TrackingChase;
                     //trigger the next state action so that we don't have to wait for another navigation packet to actually move
-                    StateTrackingChase();
                 }
                 else
                 {
@@ -275,7 +293,7 @@ namespace AR.Drone.Guide
             else
             {
                 _noTagDetectionPackets += 1;
-                if (_noTagDetectionPackets > 10)
+                if (_noTagDetectionPackets > 30)
                 {
                     state = GuideState.Searching;
                 }
@@ -312,7 +330,7 @@ namespace AR.Drone.Guide
                         targetTilt = MaxTilt;
                     }
                     if (ShouldFly)
-                      _droneClient.Progress(FlightMode.Progressive, pitch: targetTilt);
+                      _droneClient.Progress(FlightMode.Progressive, pitch: .05f); //using a static backwards value for now.
 
                 }
             }
@@ -320,7 +338,7 @@ namespace AR.Drone.Guide
             else
             {
                 _noTagDetectionPackets += 1;
-                if (_noTagDetectionPackets > 10)
+                if (_noTagDetectionPackets > 30)
                 {
                     state = GuideState.Searching;
                 }
