@@ -49,7 +49,7 @@ namespace AR.Drone.Guide
         private NavigationData _navData;
         private DroneClient _droneClient;
 
-        public static float TargetDistance = 150; //distance that we want the target to be from the drone
+        public static float TargetDistance = 200; //distance that we want the target to be from the drone
         public static float EmergencyDistance = 500; //distance that results in an emergency landing or backing off (if the drone gets too close)
         public static float MaxTilt = .15f; //max tilt value (between 0.0 and 1.0) that we can use to send to the drone
         public static float MaxVelocity = 2; //maximum velocity we want the drone to go
@@ -60,7 +60,7 @@ namespace AR.Drone.Guide
 
         public String StateText;
 
-        public bool ShouldFly = false; //just a flag for me to easily test state stuff without actually flying the drone
+        public bool ShouldFly = true; //just a flag for me to easily test state stuff without actually flying the drone
 
         public GuideState state = GuideState.None;
 
