@@ -418,6 +418,54 @@ namespace AR.Drone.Guide
 
         }
 
+        private void btn_Left_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (_guideWorker != null)
+            {
+                _guideWorker.LeftPressed = true;
+            }
+        }
+
+        private void btn_Left_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (_guideWorker != null)
+            {
+                _guideWorker.LeftPressed = false;
+            }
+        }
+
+        private void btn_Left_MouseLeave(object sender, EventArgs e)
+        {
+            if (_guideWorker != null)
+            {
+                _guideWorker.LeftPressed = false;
+            }
+        }
+
+        private void button2_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (_guideWorker != null)
+            {
+                _guideWorker.RightPressed = true;
+            }
+        }
+
+        private void button2_MouseLeave(object sender, EventArgs e)
+        {
+            if (_guideWorker != null)
+            {
+                _guideWorker.RightPressed = false;
+            }
+        }
+
+        private void button2_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (_guideWorker != null)
+            {
+                _guideWorker.RightPressed = false;
+            }
+        }
+
 
        
     }

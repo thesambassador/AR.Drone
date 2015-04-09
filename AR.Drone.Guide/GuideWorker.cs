@@ -80,6 +80,10 @@ namespace AR.Drone.Guide
         private bool _flatTrimDone = false;
 
         private Input _lastInput;
+        private bool _shouldSendInput = true;
+
+        public bool LeftPressed = false;
+        public bool RightPressed = false;
 
         public GuideWorker(DroneClient droneClient)
         {
@@ -189,11 +193,24 @@ namespace AR.Drone.Guide
         {
             if (_navData != null && ShouldFly)
             {
-                if (ElevationTarget - _navData.Altitude > .5)
+                if (ElevationTarget - _navData.Altitude > .1)
                 {
                     _lastInput.Command = Input.Type.Progress;
-                    _lastInput.Gaz = .3f;
+                    _lastInput.Gaz = .6f;
                 }
+
+            }
+        }
+
+        private void AddLeftRight()
+        {
+            if (LeftPressed)
+            {
+                _lastInput.Roll = .2f;
+            }
+            else if (RightPressed)
+            {
+                _lastInput.Roll = -.2f;
 
             }
         }
@@ -205,6 +222,7 @@ namespace AR.Drone.Guide
         private void ProcessState()
         {
             _lastInput.Reset();
+            _shouldSendInput = true;
             switch (state)
             {
                 case GuideState.Init:
@@ -228,7 +246,8 @@ namespace AR.Drone.Guide
                     StateTrackingChase();
                     break;
             }
-            if(state != GuideState.Init)
+            AddLeftRight();
+            if(state != GuideState.Init && _shouldSendInput)
                 _lastInput.Send(_droneClient);
         }
 
@@ -251,16 +270,27 @@ namespace AR.Drone.Guide
                 }
                 state = GuideState.Takeoff;
             }
+            _shouldSendInput = false;
         }
 
         //Here, we wait until we get a navdata packet that indicates that we are done taking off (state should change to hovering eventually)
         //Once we detect that we are flying, we just switch to searching
         private void StateTakeoff()
         {
-            if(!_navData.State.HasFlag(NavigationState.Takeoff) || !ShouldFly){
-                MaintainElevation();
-                if(_navData.Altitude >= ElevationTarget)
+            if (!_navData.State.HasFlag(NavigationState.Takeoff) || !ShouldFly)
+            {
+                if (_navData.Altitude >= .7)
+                    MaintainElevation();
+                else
+                    _shouldSendInput = false;
+
+                if (_navData.Altitude >= ElevationTarget)
                     state = GuideState.Searching;
+            }
+            else
+            {
+                
+                _shouldSendInput = false;
             }
         }
 
