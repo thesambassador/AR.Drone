@@ -58,6 +58,8 @@
             this.txt_currentState = new System.Windows.Forms.Label();
             this.btn_Left = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
+            this.lbl_LastCommand = new System.Windows.Forms.Label();
+            this.txt_lastCommand = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pbVideo)).BeginInit();
             this.SuspendLayout();
             // 
@@ -102,7 +104,6 @@
             // 
             // tmrStateUpdate
             // 
-            this.tmrStateUpdate.Interval = 500;
             this.tmrStateUpdate.Tick += new System.EventHandler(this.tmrStateUpdate_Tick);
             // 
             // tvInfo
@@ -251,7 +252,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(367, 451);
+            this.label6.Location = new System.Drawing.Point(367, 442);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(77, 13);
             this.label6.TabIndex = 34;
@@ -259,7 +260,7 @@
             // 
             // txt_chaseVel
             // 
-            this.txt_chaseVel.Location = new System.Drawing.Point(371, 467);
+            this.txt_chaseVel.Location = new System.Drawing.Point(371, 458);
             this.txt_chaseVel.Name = "txt_chaseVel";
             this.txt_chaseVel.Size = new System.Drawing.Size(69, 20);
             this.txt_chaseVel.TabIndex = 35;
@@ -268,7 +269,7 @@
             // 
             // txt_DetectTime
             // 
-            this.txt_DetectTime.Location = new System.Drawing.Point(457, 467);
+            this.txt_DetectTime.Location = new System.Drawing.Point(457, 458);
             this.txt_DetectTime.Name = "txt_DetectTime";
             this.txt_DetectTime.Size = new System.Drawing.Size(69, 20);
             this.txt_DetectTime.TabIndex = 37;
@@ -278,7 +279,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(450, 451);
+            this.label7.Location = new System.Drawing.Point(450, 442);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(79, 13);
             this.label7.TabIndex = 36;
@@ -339,11 +340,33 @@
             this.button2.MouseLeave += new System.EventHandler(this.button2_MouseLeave);
             this.button2.MouseUp += new System.Windows.Forms.MouseEventHandler(this.button2_MouseUp);
             // 
+            // lbl_LastCommand
+            // 
+            this.lbl_LastCommand.AutoSize = true;
+            this.lbl_LastCommand.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_LastCommand.Location = new System.Drawing.Point(282, 510);
+            this.lbl_LastCommand.Name = "lbl_LastCommand";
+            this.lbl_LastCommand.Size = new System.Drawing.Size(121, 20);
+            this.lbl_LastCommand.TabIndex = 43;
+            this.lbl_LastCommand.Text = "Last Command:";
+            // 
+            // txt_lastCommand
+            // 
+            this.txt_lastCommand.AutoSize = true;
+            this.txt_lastCommand.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txt_lastCommand.Location = new System.Drawing.Point(405, 510);
+            this.txt_lastCommand.Name = "txt_lastCommand";
+            this.txt_lastCommand.Size = new System.Drawing.Size(24, 20);
+            this.txt_lastCommand.TabIndex = 44;
+            this.txt_lastCommand.Text = "---";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(902, 539);
+            this.Controls.Add(this.txt_lastCommand);
+            this.Controls.Add(this.lbl_LastCommand);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.btn_Left);
             this.Controls.Add(this.txt_currentState);
@@ -410,6 +433,8 @@
         private System.Windows.Forms.Label txt_currentState;
         private System.Windows.Forms.Button btn_Left;
         private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Label lbl_LastCommand;
+        private System.Windows.Forms.Label txt_lastCommand;
     }
 }
 

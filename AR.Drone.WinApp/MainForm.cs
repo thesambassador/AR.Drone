@@ -490,5 +490,10 @@ namespace AR.Drone.WinApp
             }
 
         }
+
+        private void ShowLastInput()
+        {
+
+        }
     }
 }
