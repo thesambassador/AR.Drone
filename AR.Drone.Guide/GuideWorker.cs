@@ -207,10 +207,12 @@ namespace AR.Drone.Guide
             if (LeftPressed)
             {
                 _lastInput.Roll = .2f;
+                _lastInput.Command = Input.Type.Progress;
             }
             else if (RightPressed)
             {
                 _lastInput.Roll = -.2f;
+                _lastInput.Command = Input.Type.Progress;
 
             }
         }
@@ -222,6 +224,7 @@ namespace AR.Drone.Guide
         private void ProcessState()
         {
             _lastInput.Reset();
+            _lastInput.Command = Input.Type.Hover;
             _shouldSendInput = true;
             switch (state)
             {
