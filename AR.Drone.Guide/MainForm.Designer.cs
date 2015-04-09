@@ -57,7 +57,7 @@
             this.label8 = new System.Windows.Forms.Label();
             this.txt_currentState = new System.Windows.Forms.Label();
             this.btn_Left = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.btn_Right = new System.Windows.Forms.Button();
             this.lbl_LastCommand = new System.Windows.Forms.Label();
             this.txt_lastCommand = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pbVideo)).BeginInit();
@@ -324,21 +324,17 @@
             this.btn_Left.TabIndex = 41;
             this.btn_Left.Text = "Left";
             this.btn_Left.UseVisualStyleBackColor = true;
-            this.btn_Left.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btn_Left_MouseDown);
-            this.btn_Left.MouseLeave += new System.EventHandler(this.btn_Left_MouseLeave);
-            this.btn_Left.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btn_Left_MouseUp);
+            this.btn_Left.Click += new System.EventHandler(this.btn_Left_Click);
             // 
-            // button2
+            // btn_Right
             // 
-            this.button2.Location = new System.Drawing.Point(785, 428);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(104, 95);
-            this.button2.TabIndex = 42;
-            this.button2.Text = "Right";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.button2_MouseDown);
-            this.button2.MouseLeave += new System.EventHandler(this.button2_MouseLeave);
-            this.button2.MouseUp += new System.Windows.Forms.MouseEventHandler(this.button2_MouseUp);
+            this.btn_Right.Location = new System.Drawing.Point(785, 428);
+            this.btn_Right.Name = "btn_Right";
+            this.btn_Right.Size = new System.Drawing.Size(104, 95);
+            this.btn_Right.TabIndex = 42;
+            this.btn_Right.Text = "Right";
+            this.btn_Right.UseVisualStyleBackColor = true;
+            this.btn_Right.Click += new System.EventHandler(this.btn_Right_Click);
             // 
             // lbl_LastCommand
             // 
@@ -367,7 +363,7 @@
             this.ClientSize = new System.Drawing.Size(902, 539);
             this.Controls.Add(this.txt_lastCommand);
             this.Controls.Add(this.lbl_LastCommand);
-            this.Controls.Add(this.button2);
+            this.Controls.Add(this.btn_Right);
             this.Controls.Add(this.btn_Left);
             this.Controls.Add(this.txt_currentState);
             this.Controls.Add(this.label8);
@@ -432,7 +428,7 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label txt_currentState;
         private System.Windows.Forms.Button btn_Left;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button btn_Right;
         private System.Windows.Forms.Label lbl_LastCommand;
         private System.Windows.Forms.Label txt_lastCommand;
     }

@@ -435,53 +435,6 @@ namespace AR.Drone.Guide
 
         }
 
-        private void btn_Left_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (_guideWorker != null)
-            {
-                _guideWorker.LeftPressed = true;
-            }
-        }
-
-        private void btn_Left_MouseUp(object sender, MouseEventArgs e)
-        {
-            if (_guideWorker != null)
-            {
-                _guideWorker.LeftPressed = false;
-            }
-        }
-
-        private void btn_Left_MouseLeave(object sender, EventArgs e)
-        {
-            if (_guideWorker != null)
-            {
-                _guideWorker.LeftPressed = false;
-            }
-        }
-
-        private void button2_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (_guideWorker != null)
-            {
-                _guideWorker.RightPressed = true;
-            }
-        }
-
-        private void button2_MouseLeave(object sender, EventArgs e)
-        {
-            if (_guideWorker != null)
-            {
-                _guideWorker.RightPressed = false;
-            }
-        }
-
-        private void button2_MouseUp(object sender, MouseEventArgs e)
-        {
-            if (_guideWorker != null)
-            {
-                _guideWorker.RightPressed = false;
-            }
-        }
 
         private void showLastInput()
         { 
@@ -516,6 +469,40 @@ namespace AR.Drone.Guide
             }
 
             txt_lastCommand.Text = sb.ToString();
+        }
+
+        private void btn_Left_Click(object sender, EventArgs e)
+        {
+            if (_guideWorker != null)
+            {
+                if (_guideWorker.LeftPressed == true)
+                {
+                    _guideWorker.LeftPressed = false;
+                    btn_Left.BackColor = SystemColors.Control;
+                }
+                else
+                {
+                    _guideWorker.LeftPressed = true;
+                    btn_Left.BackColor = Color.Green; 
+                }
+            }
+        }
+
+        private void btn_Right_Click(object sender, EventArgs e)
+        {
+            if (_guideWorker != null)
+            {
+                if (_guideWorker.RightPressed == true)
+                {
+                    _guideWorker.RightPressed = false;
+                    btn_Right.BackColor = SystemColors.Control;
+                }
+                else
+                {
+                    _guideWorker.RightPressed = true;
+                    btn_Right.BackColor = Color.Green;
+                }
+            }
         }
 
 
