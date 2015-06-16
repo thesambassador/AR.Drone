@@ -89,12 +89,13 @@ namespace AR.Drone.Guide
         public bool RightPressed = false;
 
 		private Bitmap _frameBitmap;
+		private Bitmap _shownBitmap;
 		private VideoFrame _frame;
 		private uint _frameNumber;
 
 		public Bitmap FrameBitmap
 		{
-			get { return _frameBitmap; }
+			get { return _shownBitmap; }
 		}
 
         public GuideWorker(DroneClient droneClient)
@@ -123,7 +124,6 @@ namespace AR.Drone.Guide
                     Thread.Sleep(3);
                 }
             }
-            
         }
 
         //Every time we get data from the drone, this is called.
@@ -179,7 +179,7 @@ namespace AR.Drone.Guide
 			//so many copies, NEED TO OPTIMIZE IF THIS IS SLOW, just trying to get it working right now
 			_frameBitmap = ImageUtilities.Threshold(_frameBitmap, 220);
 
-
+			_shownBitmap = new Bitmap(_frameBitmap);
 
         }
 
