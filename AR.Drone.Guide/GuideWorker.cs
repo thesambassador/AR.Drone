@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Drawing;
+
 using AR.Drone.Avionics.Apparatus;
 using AR.Drone.Client;
 using AR.Drone.Client.Command;
@@ -81,6 +83,15 @@ namespace AR.Drone.Guide
 
         private Input _lastInput;
 
+		private Bitmap _frameBitmap;
+		private VideoFrame _frame;
+		private uint _frameNumber;
+
+		public Bitmap FrameBitmap
+		{
+			get { return _frameBitmap; }
+		}
+
         public GuideWorker(DroneClient droneClient)
         {
             _droneClient = droneClient;
@@ -148,7 +159,22 @@ namespace AR.Drone.Guide
         //Every time the video from the drone is decoded, this is called
         public void VideoPacketDecoded(VideoFrame frame)
         {
-            
+			_frame = frame;
+
+			if (_frame == null || _frameNumber == _frame.Number)
+				return;
+			_frameNumber = _frame.Number;
+
+			if (_frameBitmap == null)
+				_frameBitmap = VideoHelper.CreateBitmap(ref _frame);
+			else
+				VideoHelper.UpdateBitmap(ref _frameBitmap, ref _frame);
+
+			//so many copies, NEED TO OPTIMIZE IF THIS IS SLOW, just trying to get it working right now
+			_frameBitmap = ImageUtilities.Threshold(_frameBitmap, 220);
+
+
+
         }
 
 

@@ -490,5 +490,22 @@ namespace AR.Drone.WinApp
             }
 
         }
+
+		private void button1_Click(object sender, EventArgs e)
+		{
+			using (var dialog = new OpenFileDialog { DefaultExt = ".png" })
+			{
+				if (dialog.ShowDialog(this) == DialogResult.OK)
+				{
+					
+					Image img = Image.FromFile(dialog.FileName);
+
+					//Bitmap result = ImageUtilities.Threshold(img, 200);
+					
+					//_frameBitmap = result;
+					//pbVideo.Image = result;
+				}
+			}
+		}
     }
 }
