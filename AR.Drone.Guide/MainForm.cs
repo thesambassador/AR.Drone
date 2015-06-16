@@ -159,7 +159,7 @@ namespace AR.Drone.Guide
 				drawTagDetection();
 
             //pbVideo.Image = _frameBitmap;
-			if(_guideWorker.FrameBitmap != null)
+			if(_guideWorker != null && _guideWorker.FrameBitmap != null)
 				pbVideo.Image = _guideWorker.FrameBitmap;
         }
 
