@@ -177,9 +177,9 @@ namespace AR.Drone.Guide
 				VideoHelper.UpdateBitmap(ref _frameBitmap, ref _frame);
 
 			//so many copies, NEED TO OPTIMIZE IF THIS IS SLOW, just trying to get it working right now
-			//_frameBitmap = ImageUtilities.Threshold(_frameBitmap, 220);
+			_shownBitmap = ImageUtilities.Threshold(_frameBitmap, 220);
 
-			_shownBitmap = new Bitmap(_frameBitmap);
+			//_shownBitmap = new Bitmap(_frameBitmap);
 
         }
 

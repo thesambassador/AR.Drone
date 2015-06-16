@@ -35,15 +35,15 @@ namespace AR.Drone.Guide
 
 					if ((r + g + b) / 3 >= intensity)
 					{
-						rgbValues[pos] = 255;
-						rgbValues[pos + 1] = 255;
-						rgbValues[pos + 2] = 255;
+						//rgbValues[pos] = 255;
+						//rgbValues[pos + 1] = 255;
+						//rgbValues[pos + 2] = 255;
 					}
 					else
 					{
-						rgbValues[pos] = 0;
-						rgbValues[pos + 1] = 0;
-						rgbValues[pos + 2] = 0;
+						//rgbValues[pos] = 0;
+						//rgbValues[pos + 1] = 0;
+						//rgbValues[pos + 2] = 0;
 					}
 				}
 			}
