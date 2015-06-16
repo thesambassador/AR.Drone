@@ -88,15 +88,6 @@ namespace AR.Drone.Guide
         public bool LeftPressed = false;
         public bool RightPressed = false;
 
-		private Bitmap _frameBitmap;
-		private Bitmap _shownBitmap;
-		private VideoFrame _frame;
-		private uint _frameNumber;
-
-		public Bitmap FrameBitmap
-		{
-			get { return _shownBitmap; }
-		}
 
         public GuideWorker(DroneClient droneClient)
         {
@@ -165,21 +156,7 @@ namespace AR.Drone.Guide
         //Every time the video from the drone is decoded, this is called
         public void VideoPacketDecoded(VideoFrame frame)
         {
-			_frame = frame;
 
-			if (_frame == null || _frameNumber == _frame.Number)
-				return;
-			_frameNumber = _frame.Number;
-
-			if (_frameBitmap == null)
-				_frameBitmap = VideoHelper.CreateBitmap(ref _frame);
-			else
-				VideoHelper.UpdateBitmap(ref _frameBitmap, ref _frame);
-
-			//so many copies, NEED TO OPTIMIZE IF THIS IS SLOW, just trying to get it working right now
-			_shownBitmap = ImageUtilities.Threshold(_frameBitmap, 220);
-
-			//_shownBitmap = new Bitmap(_frameBitmap);
 
         }
 

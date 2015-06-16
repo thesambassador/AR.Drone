@@ -146,21 +146,20 @@ namespace AR.Drone.Guide
 
         private void tmrVideoUpdate_Tick(object sender, EventArgs e)
         {
-			//if (_frame == null || _frameNumber == _frame.Number)
-			//	return;
-			//_frameNumber = _frame.Number;
+			if (_frame == null || _frameNumber == _frame.Number)
+				return;
+			_frameNumber = _frame.Number;
 
-			//if (_frameBitmap == null)
-			//	_frameBitmap = VideoHelper.CreateBitmap(ref _frame);
-			//else
-			//	VideoHelper.UpdateBitmap(ref _frameBitmap, ref _frame);
+			if (_frameBitmap == null)
+				_frameBitmap = VideoHelper.CreateBitmap(ref _frame);
+			else
+				VideoHelper.UpdateBitmap(ref _frameBitmap, ref _frame);
 
             if(isFrontCamera)
 				drawTagDetection();
 
-            //pbVideo.Image = _frameBitmap;
-			if(_guideWorker != null && _guideWorker.FrameBitmap != null)
-				pbVideo.Image = _guideWorker.FrameBitmap;
+            pbVideo.Image = _frameBitmap;
+
         }
 
         private void tmrStateUpdate_Tick(object sender, EventArgs e)
