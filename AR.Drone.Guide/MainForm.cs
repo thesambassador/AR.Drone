@@ -18,6 +18,7 @@ using AR.Drone.Video;
 using AR.Drone.Avionics;
 using AR.Drone.Avionics.Objectives;
 using AR.Drone.Avionics.Objectives.IntentObtainers;
+using System.Text;
 
 namespace AR.Drone.Guide
 {
@@ -50,7 +51,7 @@ namespace AR.Drone.Guide
             _droneClient = new DroneClient("192.168.1.1");
             _droneClient.NavigationPacketAcquired += OnNavigationPacketAcquired;
             _droneClient.VideoPacketAcquired += OnVideoPacketAcquired;
-            _droneClient.NavigationDataAcquired += data => _navigationData = data;
+            _droneClient.NavigationDataAcquired += OnNavigationDataAquired;// data => _navigationData = data;
 
             tmrStateUpdate.Enabled = true;
             tmrVideoUpdate.Enabled = true;
@@ -64,6 +65,8 @@ namespace AR.Drone.Guide
             txt_maxVel.Text = GuideWorker.MaxVelocity.ToString();
             txt_targetDist.Text = GuideWorker.TargetDistance.ToString();
         }
+
+        
 
 
         private void UnhandledException(object sender, Exception exception)
@@ -98,6 +101,16 @@ namespace AR.Drone.Guide
                 _packetRecorderWorker.EnqueuePacket(packet);
 
             _navigationPacket = packet;
+
+
+        }
+
+        private void OnNavigationDataAquired(NavigationData data)
+        {
+            _navigationData = data;
+
+            
+            
         }
 
         private void OnVideoPacketAcquired(VideoPacket packet)
@@ -190,8 +203,12 @@ namespace AR.Drone.Guide
                 {
                     lbl_runnerSpeed.Text = _guideWorker.EstRunnerSpeed.ToString();
                     txt_currentState.Text = _guideWorker.StateText;
+                    showLastInput();
+
                 }
             }
+            
+
         }
 
         private void DumpBranch(TreeNodeCollection nodes, object o)
@@ -420,6 +437,76 @@ namespace AR.Drone.Guide
                 //g.DrawString("Raw Distance: " + dist.ToString(), DefaultFont, new SolidBrush(Color.Red), 0, 0);
             }
 
+        }
+
+
+        private void showLastInput()
+        { 
+            StringBuilder sb = new StringBuilder("", 30);
+            if (_guideWorker != null)
+            {
+                switch (_guideWorker.LastInput.Command)
+                {
+                    case Avionics.Apparatus.Input.Type.Takeoff:
+                        sb.Append("Takeoff ");
+                        break;
+                    case Avionics.Apparatus.Input.Type.Hover:
+                        sb.Append("Hover ");
+                        break;
+                    case Avionics.Apparatus.Input.Type.Progress:
+                        sb.Append("Progress ");
+                        break;
+                }
+                sb.Append("R: ");
+                sb.Append(_guideWorker.LastInput.Roll);
+                sb.Append("P: ");
+                sb.Append(_guideWorker.LastInput.Pitch);
+                sb.Append("Y: ");
+                sb.Append(_guideWorker.LastInput.Yaw);
+                sb.Append("G: ");
+                sb.Append(_guideWorker.LastInput.Gaz);
+
+            }
+            else
+            {
+                sb.Append("---");
+            }
+
+            txt_lastCommand.Text = sb.ToString();
+        }
+
+        private void btn_Left_Click(object sender, EventArgs e)
+        {
+            if (_guideWorker != null)
+            {
+                if (_guideWorker.LeftPressed == true)
+                {
+                    _guideWorker.LeftPressed = false;
+                    btn_Left.BackColor = SystemColors.Control;
+                }
+                else
+                {
+                    _guideWorker.LeftPressed = true;
+                    btn_Left.BackColor = Color.Green; 
+                }
+            }
+        }
+
+        private void btn_Right_Click(object sender, EventArgs e)
+        {
+            if (_guideWorker != null)
+            {
+                if (_guideWorker.RightPressed == true)
+                {
+                    _guideWorker.RightPressed = false;
+                    btn_Right.BackColor = SystemColors.Control;
+                }
+                else
+                {
+                    _guideWorker.RightPressed = true;
+                    btn_Right.BackColor = Color.Green;
+                }
+            }
         }
 
 

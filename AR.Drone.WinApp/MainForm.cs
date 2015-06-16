@@ -491,6 +491,7 @@ namespace AR.Drone.WinApp
 
         }
 
+<<<<<<< HEAD
 		private void button1_Click(object sender, EventArgs e)
 		{
 			using (var dialog = new OpenFileDialog { DefaultExt = ".png" })
@@ -507,5 +508,11 @@ namespace AR.Drone.WinApp
 				}
 			}
 		}
+=======
+        private void ShowLastInput()
+        {
+
+        }
+>>>>>>> origin/master
     }
 }
