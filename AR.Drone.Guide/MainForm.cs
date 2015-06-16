@@ -159,7 +159,8 @@ namespace AR.Drone.Guide
 				drawTagDetection();
 
             //pbVideo.Image = _frameBitmap;
-			pbVideo.Image = _guideWorker.FrameBitmap;
+			if(_guideWorker.FrameBitmap != null)
+				pbVideo.Image = _guideWorker.FrameBitmap;
         }
 
         private void tmrStateUpdate_Tick(object sender, EventArgs e)
