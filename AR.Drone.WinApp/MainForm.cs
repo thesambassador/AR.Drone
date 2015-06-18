@@ -491,5 +491,10 @@ namespace AR.Drone.WinApp
 
         }
 
+		private void button1_Click(object sender, EventArgs e)
+		{
+
+		}
+
     }
 }
