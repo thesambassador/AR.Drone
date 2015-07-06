@@ -19,9 +19,19 @@ namespace AR.Drone.Guide
             Mat img = OpenCvSharp.Extensions.BitmapConverter.ToMat(frame);
             Mat outImg = new Mat();
 
-            Cv2.CvtColor(img, img, ColorConversion.RgbaToGray);
+           // Cv2.CvtColor(img, img, ColorConversion.RgbaToGray);
 			
-			Cv2.Threshold(img, outImg, 230, 255, ThresholdType.Binary);
+			//Cv2.Threshold(img, img, 230, 255, ThresholdType.Binary);
+
+            Cv2.Canny(img, outImg, 25, 255, 3);
+
+            CvLineSegmentPoint[] lines = Cv2.HoughLinesP(outImg, 1, Cv.PI / 180, 50, 50, 10);
+
+            foreach (CvLineSegmentPoint line in lines)
+            {
+                CvScalar color = new CvScalar(0, 0, 255);   
+                Cv2.Line(outImg, line.P1, line.P2, color, 2);
+            }
 
             Window window = new Window("Test", outImg);
 		}

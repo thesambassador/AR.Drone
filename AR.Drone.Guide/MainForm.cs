@@ -163,14 +163,15 @@ namespace AR.Drone.Guide
             if(isFrontCamera)
 				drawTagDetection();
 
-            Mat img = OpenCvSharp.Extensions.BitmapConverter.ToMat(_frameBitmap);
-            Mat outImg = new Mat();
+            //Mat img = OpenCvSharp.Extensions.BitmapConverter.ToMat(_frameBitmap);
+            //Mat outImg = new Mat();
 
-            Cv2.CvtColor(img, img, ColorConversion.RgbaToGray);
-            Cv2.Threshold(img, outImg, 230, 255, ThresholdType.Binary);
+            //Cv2.CvtColor(img, img, ColorConversion.RgbaToGray);
+            //Cv2.Threshold(img, outImg, 230, 255, ThresholdType.Binary);
 
-            pbVideo.Image = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(outImg);
+            //pbVideo.Image = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(outImg);
 
+            pbVideo.Image = _frameBitmap;
            
         }
 
@@ -528,6 +529,13 @@ namespace AR.Drone.Guide
 		{
             ImageUtilities.Test(ref _frameBitmap);
 		}
+
+        private void button3_Click_1(object sender, EventArgs e)
+        {
+            var configuration = new Settings();
+            configuration.Video.Channel = VideoChannelType.Next;
+            _droneClient.Send(configuration);
+        }
 
 
        
