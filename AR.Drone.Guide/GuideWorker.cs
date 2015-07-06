@@ -154,7 +154,7 @@ namespace AR.Drone.Guide
         }
 
         //Every time the video from the drone is decoded, this is called
-        public void VideoPacketDecoded(VideoFrame frame)
+        public void VideoPacketDecoded(ref VideoFrame frame)
         {
 
 

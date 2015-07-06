@@ -5,38 +5,25 @@ using System.Text;
 using System.Drawing;
 using System.Drawing.Imaging;
 
-using OpenCV.Net;
-using System.Windows.Forms;
+using OpenCvSharp.CPlusPlus;
+using OpenCvSharp;
+
+using AR.Drone.Video;
 
 namespace AR.Drone.Guide
 {
 	public class ImageUtilities
 	{
-		public static void Test(){
-			OpenFileDialog dlg = new OpenFileDialog();
-			dlg.Title = "Open Img";
+		public static void Test(ref Bitmap frame){
 
-			if (dlg.ShowDialog() == DialogResult.OK)
-			{
-				Bitmap img = new Bitmap(dlg.FileName);
+            Mat img = OpenCvSharp.Extensions.BitmapConverter.ToMat(frame);
+            Mat outImg = new Mat();
 
-				BitmapData data = img.LockBits(new Rectangle(0, 0, img.Width, img.Height), ImageLockMode.ReadWrite, img.PixelFormat);
-				IntPtr ptr = data.Scan0;
-
-				Mat ocv = new Mat(img.Height, img.Width, Depth.U8, 3, ptr);
-				
-				
-
-
-				NamedWindow window = new NamedWindow("Test", WindowFlags.AutoSize);
-				window.ShowImage(ocv);
-
-				img.UnlockBits(data);
-
-			}
+            Cv2.CvtColor(img, img, ColorConversion.RgbaToGray);
 			
-			
-			
+			Cv2.Threshold(img, outImg, 230, 255, ThresholdType.Binary);
+
+            Window window = new Window("Test", outImg);
 		}
 
 		public static Boolean[,] ThresholdToBoolean(Image img, int intensity)

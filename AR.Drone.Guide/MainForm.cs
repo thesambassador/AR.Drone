@@ -20,6 +20,9 @@ using AR.Drone.Avionics.Objectives;
 using AR.Drone.Avionics.Objectives.IntentObtainers;
 using System.Text;
 
+using OpenCvSharp.CPlusPlus;
+using OpenCvSharp;
+
 namespace AR.Drone.Guide
 {
     public partial class MainForm : Form
@@ -127,7 +130,7 @@ namespace AR.Drone.Guide
 
             //send video frame to GuideWorker
             if(_guideWorker != null)
-                _guideWorker.VideoPacketDecoded(frame);
+                _guideWorker.VideoPacketDecoded(ref frame);
 
         }
 
@@ -146,6 +149,8 @@ namespace AR.Drone.Guide
 
         private void tmrVideoUpdate_Tick(object sender, EventArgs e)
         {
+            
+
 			if (_frame == null || _frameNumber == _frame.Number)
 				return;
 			_frameNumber = _frame.Number;
@@ -158,8 +163,15 @@ namespace AR.Drone.Guide
             if(isFrontCamera)
 				drawTagDetection();
 
-            pbVideo.Image = _frameBitmap;
+            Mat img = OpenCvSharp.Extensions.BitmapConverter.ToMat(_frameBitmap);
+            Mat outImg = new Mat();
 
+            Cv2.CvtColor(img, img, ColorConversion.RgbaToGray);
+            Cv2.Threshold(img, outImg, 230, 255, ThresholdType.Binary);
+
+            pbVideo.Image = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(outImg);
+
+           
         }
 
         private void tmrStateUpdate_Tick(object sender, EventArgs e)
@@ -514,7 +526,7 @@ namespace AR.Drone.Guide
 
 		private void button2_Click_1(object sender, EventArgs e)
 		{
-			ImageUtilities.Test();
+            ImageUtilities.Test(ref _frameBitmap);
 		}
 
 
