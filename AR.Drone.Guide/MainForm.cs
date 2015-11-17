@@ -20,6 +20,9 @@ using AR.Drone.Avionics.Objectives;
 using AR.Drone.Avionics.Objectives.IntentObtainers;
 using System.Text;
 
+using OpenCvSharp;
+using OpenCvSharp.CPlusPlus;
+
 namespace AR.Drone.Guide
 {
     public partial class MainForm : Form
@@ -41,12 +44,19 @@ namespace AR.Drone.Guide
 
 		private bool isFrontCamera = true;
 
+		//test line detection shit here
+		LineDetectorWorker _lineWorker;
+		List<CvLineSegmentPolar> _currentLines;
+
         public MainForm()
         {
             InitializeComponent();
 
             _videoPacketDecoderWorker = new VideoPacketDecoderWorker(PixelFormat.BGR24, true, OnVideoPacketDecoded);
             _videoPacketDecoderWorker.Start();
+
+			_lineWorker = new LineDetectorWorker(OnLineDetected);
+			_lineWorker.Start();
 
             _droneClient = new DroneClient("192.168.1.1");
             _droneClient.NavigationPacketAcquired += OnNavigationPacketAcquired;
@@ -91,6 +101,7 @@ namespace AR.Drone.Guide
 
             _droneClient.Dispose();
             _videoPacketDecoderWorker.Dispose();
+			_lineWorker.Dispose();
 
             base.OnClosed(e);
         }
@@ -129,7 +140,19 @@ namespace AR.Drone.Guide
             if(_guideWorker != null)
                 _guideWorker.VideoPacketDecoded(frame);
 
+			if (_lineWorker != null)
+			{
+				Bitmap bmp = VideoHelper.CreateBitmap(ref _frame);
+				Mat mat = OpenCvSharp.Extensions.BitmapConverter.ToMat(bmp);
+				_lineWorker.EnqueueFrame(mat);
+			}
+
         }
+
+		//test line detection function
+		private void OnLineDetected(List<CvLineSegmentPolar> lines){
+			_currentLines = lines;
+		}
 
         private void btnStart_Click(object sender, EventArgs e)
         {
@@ -157,6 +180,16 @@ namespace AR.Drone.Guide
 
             if(isFrontCamera)
 				drawTagDetection();
+
+			//test line detection stuff
+
+			if (_currentLines != null)
+			{
+				TestLineDetection.LineDetectionUtilities.DrawLinesOnBitmap(_frameBitmap, _currentLines);
+				_currentLines = null;
+			}
+
+			//done
 
             pbVideo.Image = _frameBitmap;
 
@@ -514,7 +547,7 @@ namespace AR.Drone.Guide
 
 		private void button2_Click_1(object sender, EventArgs e)
 		{
-			ImageUtilities.Test();
+			//ImageUtilities.Test();
 		}
 
 
