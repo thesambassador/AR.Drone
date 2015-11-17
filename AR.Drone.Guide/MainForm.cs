@@ -20,8 +20,13 @@ using AR.Drone.Avionics.Objectives;
 using AR.Drone.Avionics.Objectives.IntentObtainers;
 using System.Text;
 
+<<<<<<< HEAD
 using OpenCvSharp;
 using OpenCvSharp.CPlusPlus;
+=======
+using OpenCvSharp.CPlusPlus;
+using OpenCvSharp;
+>>>>>>> origin/master
 
 namespace AR.Drone.Guide
 {
@@ -138,7 +143,7 @@ namespace AR.Drone.Guide
 
             //send video frame to GuideWorker
             if(_guideWorker != null)
-                _guideWorker.VideoPacketDecoded(frame);
+                _guideWorker.VideoPacketDecoded(ref frame);
 
 			if (_lineWorker != null)
 			{
@@ -169,6 +174,8 @@ namespace AR.Drone.Guide
 
         private void tmrVideoUpdate_Tick(object sender, EventArgs e)
         {
+            
+
 			if (_frame == null || _frameNumber == _frame.Number)
 				return;
 			_frameNumber = _frame.Number;
@@ -181,6 +188,7 @@ namespace AR.Drone.Guide
             if(isFrontCamera)
 				drawTagDetection();
 
+<<<<<<< HEAD
 			//test line detection stuff
 
 			if (_currentLines != null)
@@ -192,7 +200,18 @@ namespace AR.Drone.Guide
 			//done
 
             pbVideo.Image = _frameBitmap;
+=======
+            //Mat img = OpenCvSharp.Extensions.BitmapConverter.ToMat(_frameBitmap);
+            //Mat outImg = new Mat();
+>>>>>>> origin/master
 
+            //Cv2.CvtColor(img, img, ColorConversion.RgbaToGray);
+            //Cv2.Threshold(img, outImg, 230, 255, ThresholdType.Binary);
+
+            //pbVideo.Image = OpenCvSharp.Extensions.BitmapConverter.ToBitmap(outImg);
+
+            pbVideo.Image = _frameBitmap;
+           
         }
 
         private void tmrStateUpdate_Tick(object sender, EventArgs e)
@@ -547,8 +566,19 @@ namespace AR.Drone.Guide
 
 		private void button2_Click_1(object sender, EventArgs e)
 		{
+<<<<<<< HEAD
 			//ImageUtilities.Test();
+=======
+            ImageUtilities.Test(ref _frameBitmap);
+>>>>>>> origin/master
 		}
+
+        private void button3_Click_1(object sender, EventArgs e)
+        {
+            var configuration = new Settings();
+            configuration.Video.Channel = VideoChannelType.Next;
+            _droneClient.Send(configuration);
+        }
 
 
        
